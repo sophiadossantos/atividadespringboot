@@ -1,43 +1,37 @@
 package com.atividadespringboot.controller;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.atividadespringboot.service.ClienteService;
-import com.atividadespringboot.entity.Cliente;
-
+import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import java.util.List;
-import java.util.Optional;
+import com.atividadespringboot.dto.ClienteDTO;
+import com.atividadespringboot.service.ClienteService;
 
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
 
-    @Autowired
-    private ClienteService service;
+    private final ClienteService service;
 
-    @GetMapping
-    public List<Cliente> listarTodos() {
-        return service.listarTodos();
-    }
-
-    @GetMapping("/{id}")
-    public Optional<Cliente> buscarPorId(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    public ClienteController(ClienteService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public Cliente salvar(@RequestBody Cliente cliente) {
-        return service.salvar(cliente);
+    public ResponseEntity<ClienteDTO> criarCliente(@Valid @RequestBody ClienteDTO dto) {
+        ClienteDTO salvo = service.salvar(dto);
+        return ResponseEntity.ok(salvo);
     }
 
-    @PutMapping("/{id}")
-    public Cliente atualizar(@PathVariable Long id, @RequestBody Cliente cliente) {
-        cliente.setId(id);
-        return service.salvar(cliente);
+    @GetMapping
+    public ResponseEntity<List<ClienteDTO>> listarClientes() {
+        return ResponseEntity.ok(service.listarTodos());
     }
 
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
-        service.deletar(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long id) {
+        return service.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

@@ -1,15 +1,23 @@
 package com.atividadespringboot.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import com.atividadespringboot.enums.StatusEnum;
+
 public class ClienteDTO {
-    private Long id;
+
+    @NotBlank(message = "Nome é obrigatório")
     private String nome;
+
+    @Email(message = "Email inválido")
+    @NotBlank(message = "Email é obrigatório")
     private String email;
+
     private String telefone;
-    private String status;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    private StatusEnum status;
 
+    // getters e setters
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
@@ -19,6 +27,6 @@ public class ClienteDTO {
     public String getTelefone() { return telefone; }
     public void setTelefone(String telefone) { this.telefone = telefone; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public StatusEnum getStatus() { return status; }
+    public void setStatus(StatusEnum status) { this.status = status; }
 }

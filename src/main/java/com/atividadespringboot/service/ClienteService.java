@@ -1,32 +1,38 @@
 package com.atividadespringboot.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.atividadespringboot.repository.ClienteRepository;
-import com.atividadespringboot.entity.Cliente;
-
 import java.util.List;
 import java.util.Optional;
+import com.atividadespringboot.entity.Cliente;
+import com.atividadespringboot.dto.ClienteDTO;
+import com.atividadespringboot.mapper.ClienteMapper;
+import com.atividadespringboot.repository.ClienteRepository;
 
 @Service
 public class ClienteService {
 
-    @Autowired
-    private ClienteRepository repository;
+    private final ClienteRepository repository;
+    private final ClienteMapper mapper;
 
-    public List<Cliente> listarTodos() {
-        return repository.findAll();
+    public ClienteService(ClienteRepository repository, ClienteMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
     }
 
-    public Optional<Cliente> buscarPorId(Long id) {
-        return repository.findById(id);
+    public ClienteDTO salvar(ClienteDTO dto) {
+        Cliente cliente = mapper.toEntity(dto);
+        Cliente salvo = repository.save(cliente);
+        return mapper.toDTO(salvo);
     }
 
-    public Cliente salvar(Cliente cliente) {
-        return repository.save(cliente);
+    public List<ClienteDTO> listarTodos() {
+        return repository.findAll()
+                .stream()
+                .map(mapper::toDTO)
+                .toList();
     }
 
-    public void deletar(Long id) {
-        repository.deleteById(id);
+    public Optional<ClienteDTO> buscarPorId(Long id) {
+        return repository.findById(id).map(mapper::toDTO);
     }
 }

@@ -1,15 +1,15 @@
 package com.atividadespringboot.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-import com.atividadespringboot.entity.Cliente;
+import org.mapstruct.Mapping;
 import com.atividadespringboot.dto.ClienteDTO;
+import com.atividadespringboot.entity.Cliente;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ClienteMapper {
 
-    ClienteMapper INSTANCE = Mappers.getMapper(ClienteMapper.class);
-
-    ClienteDTO toDTO(Cliente cliente);
+    @Mapping(target = "id", ignore = true) // id gerado pelo banco
     Cliente toEntity(ClienteDTO dto);
+
+    ClienteDTO toDTO(Cliente entity);
 }
