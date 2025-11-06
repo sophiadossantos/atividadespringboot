@@ -1,7 +1,7 @@
 package com.atividadespringboot.entity;
 
-import jakarta.persistence.*;
 import com.atividadespringboot.enums.StatusEnum;
+import jakarta.persistence.*;
 
 @Entity
 public class Cliente extends Pessoa {

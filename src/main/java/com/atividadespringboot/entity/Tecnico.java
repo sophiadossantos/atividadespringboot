@@ -1,6 +1,7 @@
 package com.atividadespringboot.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 
 @Entity
 public class Tecnico extends Pessoa {

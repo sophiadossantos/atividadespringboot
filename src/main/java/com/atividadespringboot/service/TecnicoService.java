@@ -1,38 +1,32 @@
 package com.atividadespringboot.service;
 
+import com.atividadespringboot.entity.Tecnico;
+import com.atividadespringboot.repository.TecnicoRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
-import com.atividadespringboot.entity.Tecnico;
-import com.atividadespringboot.dto.TecnicoDTO;
-import com.atividadespringboot.mapper.TecnicoMapper;
-import com.atividadespringboot.repository.TecnicoRepository;
 
 @Service
 public class TecnicoService {
 
-    private final TecnicoRepository repository;
-    private final TecnicoMapper mapper;
+    private final TecnicoRepository tecnicoRepository;
 
-    public TecnicoService(TecnicoRepository repository, TecnicoMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
+    public TecnicoService(TecnicoRepository tecnicoRepository) {
+        this.tecnicoRepository = tecnicoRepository;
     }
 
-    public TecnicoDTO salvar(TecnicoDTO dto) {
-        Tecnico tecnico = mapper.toEntity(dto);
-        Tecnico salvo = repository.save(tecnico);
-        return mapper.toDTO(salvo);
+    public List<Tecnico> listarTodos() {
+        return tecnicoRepository.findAll();
     }
 
-    public List<TecnicoDTO> listarTodos() {
-        return repository.findAll()
-                .stream()
-                .map(mapper::toDTO)
-                .toList();
+    public Tecnico buscarPorId(Long id) {
+        return tecnicoRepository.findById(id).orElse(null);
     }
 
-    public Optional<TecnicoDTO> buscarPorId(Long id) {
-        return repository.findById(id).map(mapper::toDTO);
+    public Tecnico salvar(Tecnico tecnico) {
+        return tecnicoRepository.save(tecnico);
+    }
+
+    public void deletar(Long id) {
+        tecnicoRepository.deleteById(id);
     }
 }

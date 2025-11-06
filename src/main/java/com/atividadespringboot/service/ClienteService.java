@@ -1,38 +1,32 @@
 package com.atividadespringboot.service;
 
+import com.atividadespringboot.entity.Cliente;
+import com.atividadespringboot.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
-import com.atividadespringboot.entity.Cliente;
-import com.atividadespringboot.dto.ClienteDTO;
-import com.atividadespringboot.mapper.ClienteMapper;
-import com.atividadespringboot.repository.ClienteRepository;
 
 @Service
 public class ClienteService {
 
-    private final ClienteRepository repository;
-    private final ClienteMapper mapper;
+    private final ClienteRepository clienteRepository;
 
-    public ClienteService(ClienteRepository repository, ClienteMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
+    public ClienteService(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
     }
 
-    public ClienteDTO salvar(ClienteDTO dto) {
-        Cliente cliente = mapper.toEntity(dto);
-        Cliente salvo = repository.save(cliente);
-        return mapper.toDTO(salvo);
+    public List<Cliente> listarTodos() {
+        return clienteRepository.findAll();
     }
 
-    public List<ClienteDTO> listarTodos() {
-        return repository.findAll()
-                .stream()
-                .map(mapper::toDTO)
-                .toList();
+    public Cliente buscarPorId(Long id) {
+        return clienteRepository.findById(id).orElse(null);
     }
 
-    public Optional<ClienteDTO> buscarPorId(Long id) {
-        return repository.findById(id).map(mapper::toDTO);
+    public Cliente salvar(Cliente cliente) {
+        return clienteRepository.save(cliente);
+    }
+
+    public void deletar(Long id) {
+        clienteRepository.deleteById(id);
     }
 }
